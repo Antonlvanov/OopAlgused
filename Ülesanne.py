@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 class Person:
     """
     Class for people.
@@ -63,8 +65,10 @@ def sort_by_most_hobbies(people_list: list) -> list:
     :param people_list: list of people to sort.
     :return: sorted list of people.
     """
-    return sorted(people_list, key=lambda person: (-len(person.hobbies), person.full_name))
-
+    def most_hobbies_key(person):
+        return (-len(person.hobbies), person.full_name)
+    
+    return sorted(people_list, key=most_hobbies_key)
 
 def sort_by_least_hobbies(people_list: list) -> list:
     """
@@ -76,7 +80,10 @@ def sort_by_least_hobbies(people_list: list) -> list:
     :param people_list: list of people to sort.
     :return: sorted list of people.
     """
-    return sorted(people_list, key=lambda person: (len(person.hobbies), person.full_name))
+    def least_hobbies_key(person):
+        return (len(person.hobbies), person.full_name)
+    
+    return sorted(people_list, key=least_hobbies_key)
 
 
 def sort_people_and_hobbies(people_list: list) -> list:
@@ -88,9 +95,12 @@ def sort_people_and_hobbies(people_list: list) -> list:
     :param people_list: list of people to sort.
     :return: sorted list of people.
     """
-    for person in people_list:
+    
+    sorted_people = sorted(people_list, key=attrgetter('full_name'))
+    
+    for person in sorted_people:
         person.hobbies.sort()
-    return sorted(people_list, key=lambda person: person.full_name)
+    return sorted_people
 
 
 if __name__ == '__main__':
